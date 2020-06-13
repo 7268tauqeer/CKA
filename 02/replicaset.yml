@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+# replicaset block
+metadata:
+  name: test-rs
+spec:
+
+  replicas: 3
+# select pods based on labels which should be replicated based on label
+# if there are pods available with name label replicaset will count those as well in the total count 
+  selector:
+    matchLabels:
+      env: testing
+# template for pod   
+  template:
+    metadata:
+      labels:
+        env: testing
+# configuration of the containers in the pod
+    spec:
+      containers:
+      - image: nginx
+        name: test-container-replicaset

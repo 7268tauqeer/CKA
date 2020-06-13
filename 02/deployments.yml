@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata:
+  name: test-deployment
+
+# deployment configuration
+spec:
+  replicas: 5
+# pod selector
+  selector:
+    matchLabels:
+      env: testing
+#pod template
+  template:
+    metadata:
+      labels: 
+        env: testing
+        app: cka-prep
+# container specification
+    spec:
+      containers:
+        - name: cka-prem
+          image: nginx
