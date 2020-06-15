@@ -1,0 +1,16 @@
+### client--> node:node_port--> pod:pod_port
+### nodeport service exposes a ephemeral port on the node which in turn serves, services served by the pod or targetport
+### selector select the pods based on labels
+###three types of port: port, nodeport, targetport
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodeport-test
+spec:
+  selector:
+    app: back
+  type: NodePort
+  ports:
+  - port: 80
+    targetPort: 80

@@ -1,0 +1,13 @@
+### needs coud integration to deploy LB in front of service
+### session affinit and external traffic policy and imp things to look into
+apiVersion: v1
+kind: Service
+metadata:
+  name: loadbalancer
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    protocol: TCP
+  selector:
+    app: back

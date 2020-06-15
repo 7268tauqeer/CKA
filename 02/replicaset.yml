@@ -16,6 +16,7 @@ spec:
     metadata:
       labels:
         env: testing
+        app: back
 # configuration of the containers in the pod
     spec:
       containers:
