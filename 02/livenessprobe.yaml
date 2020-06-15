@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod 
+metadata:
+  name: livenessprobe
+spec:
+  containers:
+  - name: liveness-test
+    image: nginx
+    ports:
+      - containerPort: 80
+
+### liveness probe configuration 
+### different types of probe(ove http or exit status of a command etc)
+### Initial delay pod launch--> delay--> prob check
+### period seconds wait time between each probe
+     
+    livenessProbe:
+      httpGet:
+        path: /index.html
+        port: 80
+      initialDelaySeconds: 60
+      periodSeconds: 5  

@@ -20,4 +20,4 @@ spec:
     spec:
       containers:
         - name: cka-prem
-          image: nginx
+          image: nginx:1.17.3

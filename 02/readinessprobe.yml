@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod 
+metadata:
+  name: readinessprobe
+spec: 
+### containers is a list
+  containers:
+  - name: readinessprobe
+    image: nginx
+
+### same as livenessprobe
+### core components exec or http healthcheck method
+### command or path to check health too
+### initialdelay or periodSeconds
+    readinessProbe:
+      exec:
+        command:
+        - cat 
+        - /usr/share/nginx/html/index.html
+      initialDelaySeconds: 5
+      periodSeconds: 5
