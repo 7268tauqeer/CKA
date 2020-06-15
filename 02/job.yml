@@ -1,0 +1,15 @@
+apiVersion: batch/v1
+###check restart policy file to know more about restartpolicy for container
+kind: Job
+metadata:
+  name: batchjob
+spec:
+  template:
+    spec:
+      containers:
+      - name: busybox
+        image: busybox
+        command: ["ping"]
+        args: ["8.8.8.8" , "-c", "10"]
+      restartPolicy: Never
+

@@ -1,0 +1,21 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: test-cronjob
+### diff from normal job is that cronjob have schedule part
+spec:
+  schedule: "*/1 * * * *"
+### Jobtemplate specification about jobs
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: job-pod
+            image: busybox
+            args:
+            - ping 
+            - -c
+            - "10"
+            - "8.8.8.8"
+          restartPolicy: OnFailure
