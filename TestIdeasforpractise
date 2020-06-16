@@ -1,2 +1,4 @@
 1- Create cronjobs to perfrom some data mining and upload data to nfs based persistent vol
 2- Create deployment backed by replicaset, service etc and demonstrate HA
+3- Deploy daemonset in collabortaion with above application to for log analytics
+4- create deployment using nodeaffinity/podaffinity

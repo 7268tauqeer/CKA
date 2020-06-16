@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Pod 
+metadata:
+  name: node-affinity-test
+
+### affinity specificaiton for scheduling pod to a certain node
+###  [requiredDuringScheduling{scheduler calculates weight of nodes to which pod need to scheduled,
+###  IgnoredDuringExecution{WHEN SCHEDULER SENDS EXECUTION COMMAND TO KUBELET}] 
+###  nodeSelectorTerms rules which decides which node to select
+### Matchexpression and operation use it select node labels
+
+spec:
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+            - key: env
+              operator: In 
+              values:
+              - preprod 
+  containers:
+  - name: busybox
+    image: busybox
+    command: ["sleep"]
+    args: ["3600"]
+  - name: nginx
+    image: nginx
+            

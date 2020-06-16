@@ -1,0 +1,21 @@
+## Daemonset use case is to depoy monitoring solution 
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: testdaemon
+### in spec selector's matchLabels needs to match pods labels as well
+### this is to make sure Demonset keeps track of all the pods deployed by it
+
+spec:
+  selector:
+    matchLabels:
+      env: testing 
+  template:
+    metadata:
+      labels:
+        name: mon
+        env: testing
+    spec: 
+      containers:
+      - name: daemoncontainer
+        image: nginx

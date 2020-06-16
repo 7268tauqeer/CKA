@@ -1,0 +1,16 @@
+### prior to applying you need to apply label to node
+### kubectl label nodes <your-node-name> key=value
+### helps is selecting node for a pod
+
+apiVersion: v1
+kind: Pod 
+metadata:
+  name: nodeselector-test
+## spec contain node selector which selects node based on label
+
+spec: 
+  containers:
+  - name: node01pod
+    image: nginx
+  nodeSelector:
+    env: preprod

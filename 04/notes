@@ -1,0 +1,103 @@
+1- Manual scheduling add "nodeName" to pod, which is not set by default.
+2- Scheduler calculates the nodes based on the algorithm and assigns pod the suitable node
+3- Or create create a binding for a node, binding is an object in k8
+apiVersion: v1
+kind: Binding 
+metadata: 
+    name: nginx
+target: 
+    apiVersion: v1
+    kind: node
+    name: 
+4- attach labels to each object, labels can be added to the metadata
+5- Use below command to filter object based on labels
+kubectl get pods --selector app=App1
+example: 
+    Object such as replicaset, services use selectors to work with objects i.e. pod or nodes
+    in replicaset spec.selector.matchLabels is used to group pods using labels
+6- Pod to Node relation
+    A- Taint and Toleration:
+         Taint is applied to Node and toleration applied to pods
+         if the Pod have toleration for the taint, scheduler schedules the pod on the node
+
+        kubectl taint nodes node-name key-value:taint-effect
+        three taint effects:
+            a- Noschedule : Dont schedule
+            b- PreferNoschedule: prefer not to Schedule
+            c- NoExecute: removes pod which dont have toleration from the node
+        
+        Toleration is applied to the pod, add toleration spec in pods spec
+        toleration:
+        - key: "app"
+          operator: "Equal"
+          value: "blue"
+          effect: "Noschedule
+    
+
+
+### Master node have taint set on it with effect Noschedule
+### Taint only configures node to accept pods with certain toleration 
+but it does not make sure and pod with toleration will be schedule on that node
+for that purpose we have node affinity
+
+    B: NodeSelector:
+        configure for replicaset, deployment or pod with node selector to choose only certain nodes
+        using labels
+
+        kubectl label nodes <node-name> key=value
+
+    C: NodeAffinity
+        pods are scheduled on certain nodes, expands capabilities of node selector.
+
+        Scheduling(Scheduler calculates a node for the pod) + Execution(Scheduler schedules the pod on the node)
+        Three node affinity rules:
+            i- requiredDuringSchedulingIgnoredDuringExecution
+            ii- prefferedDuringSchedulingIgnoredDuringExecution
+            iii- requiredDuringSchedulingrequiredDuringExecution
+
+        affinity:
+            nodeAffinity:
+                requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+                - key: env
+                operator: In 
+                values:
+                 - preprod 
+
+#### taint tolerations + nodeAffinity works together for perfect scheduling
+
+7- Resource Requirments:
+
+    CPU MEM Disk, can be defined in pod or deployment file 
+    CPU 1m Mem 1 Mi
+
+#### Kubernetes throttles the CPU but not memory 
+####so if a pod uses more CPU k8 throttles it but if a Pod uses more memory it terminates it
+    
+    resources:
+        requests:
+            memory: "1Gi"
+            cpu: 1
+        limits:
+            memory: "2Gi"
+            cpu: 2
+
+8- Static Pods 
+    Place pods manifest file in any location or below location and pass this location as an argument to kubelet service
+    kubelet check for manifest file in the location and create static pods and if the manifest file is deleted the Static
+    pod is deleted as well.
+
+    Default manifest file location: /etc/kubernetes/manifest
+    or
+    --config=kubeconfig.yml -----> kubeconfig.yml have staticPodPath: /etc/kubernetes/manifest
+
+9- Multiple scheduler
+
+
+
+11- Pod Affinity and Pod anti-affinity
+    pod to pod relation
+    it decides where the pod should be scheduled, example suppose backend pod need to scheduled one different
+    node then the front end pod
+    
