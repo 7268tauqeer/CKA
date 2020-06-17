@@ -9,3 +9,8 @@ or
 kubectl config view -o jsonpath="{.contexts[*].name}" 
 or 
 kubectl config view -o jsonpath="{.contexts[*].name}" | tr " " "\n"
+OR 
+get current context without using kubectl command
+cat ~/.kube/config | grep current 
+or 
+cat ~/.kube/config | grep current | sed -e "s/current-context: //"
