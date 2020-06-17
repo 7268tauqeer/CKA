@@ -1,0 +1,67 @@
+TLS Basics:
+1- Symmetric encryption(One key)
+2- Assymmetric encryption(Two Kyes priv and Public)
+Example ssh:
+    ssh-keygen: create key pair, copy the pub key to to .ssh/authorized_keys folder on server.
+    Pub key is used to encrypt the content while priv key is used to decryt.
+    Note: you can copy your pub key to as many servers as possible or in turn other users can create 
+    their key pair and copy it to servers
+    only private key is used for encryption and server can use it to decrypt therefor hacker cant do anything using MITM attack.
+
+    Additionally certificates can be used to prov identity of the server and therefor hacker cant perform phishing attack.
+
+    Certificate have following informaiton:
+    1- Serial number
+    2- Signature algo
+    3- Issuer information
+    4- Validity
+    5- Subject 
+    6- X509v3 Subject alternative name
+    70 Subject priv key info
+
+    ###browsers have mechanism to check cert validating
+    create Priv key create CSR using priv key and Domain name using below command
+    openssl req -new -key priv.key -out my.csr -subj "/C=US/ST=CA/O=myorg, Inc./CN=my-startup.com"
+    CA makes sure that you are the owner of the domain for which u want to create cert.
+    valid CA are configured in System or browser.
+
+    # you can deploy private CA for your internal public key infra
+
+
+
+############################################PKI##########################################
+Assymetric key for ssh
+Assymetric for Https
+    Server generates priv key and CSR and sends it to CA for signing, 
+    CA have its own priv and public key and signs the CSR with it pub key.
+    when a client request for web page, web server send encrypted cert which client decrypts using CA's public key
+    and gets the pub key of web server
+    client created Assymetric key and encrypts key with webserver's pub key which it got from webserver cert
+    webserver gets encrypted client's assymetric key and decrypts with its priv key.
+    Note: for certificate based client authentication:
+    Cient creates its own and validate it with the CA 
+
+#########################################################################################
+
+.crt or .pem for public key and .key or -key.pem for private key
+Communication between all the components of the k8 is secured using TLS
+
+Server: API server, ETCD server, kubelet server all have cert and priv key.
+Client: Admin and scheduler and kube controller manager and Kube-proxy need to talk to kubeAPI server so all need to have cert and priv key.
+CA: to validate server certificates mainly etcd and apiserver
+
+##########################VIEW CERTIFICATE INFORMATION######################################
+THE HARD WAY:
+/etc/systemd/system/kube-apiserver.service
+Kubeadm
+/etc/kubernetes/manifest/kube-apiserver.yaml
+
+openssl x509 -in /etc/kubernetes/pki/apiserver.crt -text -noout
+
+IMP: name, alternative name, issuer and expiry date
+
+##########################Certificate API#######################   
+to sign any certificate by K8 CA, kubernetes provides API, we can create certificate signing object
+Note: certificate in CSR object should be base64 and usage and group should be mentioned.
+Groups give appropriate permissions to the certificate
+Note: All this tasks are done by kubernetes controller manager

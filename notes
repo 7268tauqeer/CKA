@@ -1,0 +1,11 @@
+1- get context related info
+
+kubectl config get-contexts
+or 
+kubectl config view 
+or 
+kubectl config view -o jsonpath="{.contexts[*]}"
+or 
+kubectl config view -o jsonpath="{.contexts[*].name}" 
+or 
+kubectl config view -o jsonpath="{.contexts[*].name}" | tr " " "\n"
